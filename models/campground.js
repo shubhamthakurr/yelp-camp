@@ -14,6 +14,17 @@ ImageSchema.virtual('thumbnail').get(function (){
 const CampgroundSchema = new Schema({
     title: String,
     images: [ImageSchema],
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     price: Number,
     description: String,
     location: String,
@@ -37,11 +48,11 @@ CampgroundSchema.post('findOneAndDelete', async function (campground){
             }
         })
     }
-    if (campground.images) {
-        for (const img of campground.images) {
-          await cloudinary.uploader.destroy(img.filename);
-        }
-    }
+    // if (campground.images) {
+    //     for (const img of campground.images) {
+    //       await cloudinary.uploader.destroy(img.filename);
+    //     }
+    // }
 })
 
 module.exports = mongoose.model('Campground', CampgroundSchema);
